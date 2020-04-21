@@ -11,17 +11,17 @@ class TX
 public:
   TX(int id);
   ~TX();
-  void PushToBuffer(Packet* packet) { this->buffer_->push(packet); }
-  void PopFromBuffer() { this->buffer_->pop(); }
-  Packet* PacketFromBuffer() { return this->buffer_->front(); }
-  void SetTXPacket(Packet* packet) { this->current_packet_ = packet; }
-  bool BufferEmpty() { return this->buffer_->empty(); }
-  uint32_t GetTXID() { return this->tx_id_; }
+  void PushToBuffer(Packet* packet) { this->buffer_->push(packet); }      //Method that allows to push packet to TX's buffer
+  void PopFromBuffer() { this->buffer_->pop(); }                          //Method that allows to remove longest waiting packet from buffer
+  Packet* PacketFromBuffer() { return this->buffer_->front(); }           //Method that gives us the access to longest waiting packet in buffer
+  void SetTXPacket(Packet* packet) { this->current_packet_ = packet; }    //Sets packet as currently serviced by TX
+  bool BufferEmpty() { return this->buffer_->empty(); }                   //Returns whether buffer is empty or not
+  uint32_t GetTXID() { return this->tx_id_; }                             //Returns very own TX's ID
   
 private:
-  std::queue<Packet*>* buffer_;
-  uint32_t tx_id_;
-  Packet* current_packet_;
+  std::queue<Packet*>* buffer_;               //Packet buffer declaration
+  uint32_t tx_id_;                            //Very own TX's ID
+  Packet* current_packet_;                    //Currently serviced packet
 };
 
 #endif //TX_H_
