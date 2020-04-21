@@ -1,9 +1,1 @@
- [INFO] Packet of ID : 2 has been created.
- [INFO] Buffer of TX of ID : 2 is empty. Packet passed.
- [INFO] Channel free, packet of ID : 2 passed to channel.
- [INFO] Packet of ID : 2 passed through channel, REMOVED from channel.
- [INFO] Packet of ID : 2 received by RX of ID : 2
- [INFO] Packet of ID : 2 clear. ACK TRUE.
- [INFO] Packet of ID : 2 returning with ACK flag set through the channel.
- [INFO] Packet of ID : 2 transmitted successfully
- [INFO] Packet of ID : 2 has been DELETED from system.
+ [INFO] Packet of ID : 3 has been created.
