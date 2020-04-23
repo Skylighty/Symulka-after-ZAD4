@@ -5,7 +5,7 @@
 #include "rx.h"
 #include "tx.h"
 
-Packet::Packet(uint32_t did, WirelessNetwork* network)
+Packet::Packet(uint32_t did, WirelessNetwork* &network)
 {
   state_ = State::CREATED;
   error_ = false;
@@ -22,8 +22,10 @@ Packet::Packet(uint32_t did, WirelessNetwork* network)
   this->Execute();
 }
 
+//TODO - Safe deleting packet from vector after hitting retransmission cap or successful transmission end. 
 Packet::~Packet()
 {
+  //network_->PacketList->
   this->logger_->Info("Packet of ID : " + std::to_string(this->packet_id_) + " has been DELETED from system.");
 }
 
@@ -43,38 +45,42 @@ void Packet::Execute()
   active_ = true;
   if (active_ == true)
   {
-    TX* CurrentTX = this->network_->GetTX(this->devices_id_);
-    RX* CurrentRX = this->network_->GetRX(this->devices_id_);
-    std::string pid = std::to_string(this->packet_id_);
     switch (state_)
     {
     case State::CREATED:
     {
       this->StateCreated();
+      break;
     }
     case State::WAITING:
     {
       this->StateWaiting();
+      break;
     }
     case State::SENT:
     {
       this->StateSent();
+      break;
     }
     case State::IN_CHANNEL:
     {
       this->StateInChannel();
+      break;
     }
     case State::RECEIVED:
     {
       this->StateReceived();
+      break;
     }
     case State::SENT_BACK:
     {
       this->StateSentBack();
+      break;
     }
     case State::CHECK:
     {
       this->StateCheck();
+      break;
     }
     }
   }
@@ -82,6 +88,7 @@ void Packet::Execute()
 
 void Packet::Activate(double time)
 {
+  this->active_ = true;
 }
 
 void Packet::StateCreated()
@@ -90,9 +97,9 @@ void Packet::StateCreated()
   std::string pid = std::to_string(this->packet_id_);
   logger_->Info("Packet of ID : " + pid + " has been created.");
   state_ = State::WAITING;  //Automatically we change state to WAITING, because here we decide what to do next
-  if (CurrentTX->BufferEmpty()) //Checking if TX's packet buffer is empty or if it contains any packets
+  if ((CurrentTX->BufferEmpty()) && (CurrentTX->GetCurrentPacket() == nullptr)) //Checking if TX's packet buffer is empty or if it contains any packets
   {   //If the buffer is empty, packet is immediately set as TX's current and transmitted 
-    logger_->Info("Buffer of TX of ID : " + std::to_string(CurrentTX->GetTXID()) + " is empty. Packet passed.");
+    logger_->Info("Buffer of TX of ID : " + std::to_string(CurrentTX->GetTXID()) + " is empty. Set as current packet for TX");
     CurrentTX->SetTXPacket(this);
   }
   else
@@ -107,25 +114,26 @@ void Packet::StateWaiting()
   //Here, the packet checks if the channel is busy, automatically incrementing "t" parameter - counter of channel checks
   std::string pid = std::to_string(this->packet_id_);
   ++this->t_;
-  if (this->network_->channel_->ChannelBusy() == true)
+  if (this->network_->channel_->ChannelBusy() == false)
   {
-    //If channel busy, state is not being changed, packet should wait for next channel check.
+    //If channel ain't busy, the packet is passed to channet, simultaneously "t" counter resters back to 0.
     this->network_->channel_->SetBusy(true); //Channel set to busy if we start transmitting
-    logger_->Info("Channel busy, packet of ID : " + pid + " is still waiting.");
-    this->WaitCP();
+    logger_->Info("Channel free, packet of ID : " + pid + " passed to the channel.");
+    this->t_ = 0; 
+    state_ = State::SENT;
   }
   else
   {
-    //If channel ain't busy, the packet is passed to channet, simultaneously "t" counter resters back to 0.
-    logger_->Info("Channel free, packet of ID : " + pid + " passed to channel.");
-    this->t_ = 0;
-    state_ = State::SENT;
+    //If channel busy, state is not being changed, packet should wait for next channel check.
+    logger_->Info("Channel busy, packet of ID : " + pid + " is still waiting.");
+    this->WaitCP();
   }
 }
 
 void Packet::StateSent()
 {
   //Packet is pushed to the channel
+  this->logger_->Info("Packet has been put in the channel successfully.");
   this->network_->channel_->PushPacketToChannel(this);
   state_ = State::IN_CHANNEL;
 }
@@ -174,10 +182,9 @@ void Packet::StateSentBack()
   //Packet is sent back to TX throught channel
   std::string pid = std::to_string(this->packet_id_);
   network_->channel_->PushPacketToChannel(this);
-  //TODO - Should channel be set as busy during ACK feedback? Also Ph.D Sroka said to ask about that.
+  network_->channel_->SetBusy(true); //Channel busy for ACK transmission time
   this->WaitCTIZ(); //ACK transmission time to TX is being waited
   logger_->Info("Packet of ID : " + pid + " returning with ACK flag set through the channel.");
-  network_->channel_->RemovePacketFromChannel(); //Packet removed from channel again.
   state_ = State::CHECK;
 }
 
@@ -187,6 +194,8 @@ void Packet::StateCheck()
   TX* CurrentTX = this->network_->GetTX(this->devices_id_);
   std::string pid = std::to_string(this->packet_id_);
   CurrentTX->SetTXPacket(this);
+  network_->channel_->RemovePacketFromChannel(); //Packet removed from channel again.
+  network_->channel_->SetBusy(false); //Channel free after transmitting ACK
   if ((this->ack_ == false) && (this->retransmission_ == true))
   {
     //As my channel availability algorithim (A4) says - if retransmission is needed here we go: 
@@ -200,6 +209,7 @@ void Packet::StateCheck()
     }
     else
       //If ack flag set to true, delete packet and output a success transmission message.
+      logger_->Info("Packet of ID : " + pid + " reached retransmission cap.");
       delete this;
   }
   else
@@ -212,9 +222,11 @@ void Packet::StateCheck()
 
 bool Packet::CheckForErrors(Channel* channel)
 {
+  //TODO - Implement checking for errors
   return false;
 }
 
+//TODO - Implement waiting these times or do it through "Activate(double time)"
 void Packet::WaitCP()
 {
   

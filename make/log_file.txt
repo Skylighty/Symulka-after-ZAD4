@@ -1,1 +1,11 @@
- [INFO] Packet of ID : 3 has been created.
+ [INFO] Packet of ID : 4 has been created.
+ [INFO] Buffer of TX of ID : 4 is empty. Set as current packet for TX
+ [INFO] Channel busy, packet of ID : 4 is still waiting.
+ [INFO] Channel busy, packet of ID : 4 is still waiting.
+ [INFO] Channel busy, packet of ID : 4 is still waiting.
+ [INFO] Channel busy, packet of ID : 4 is still waiting.
+ [INFO] Channel busy, packet of ID : 4 is still waiting.
+ [INFO] Channel free, packet of ID : 4 passed to the channel.
+D : 2
+ [INFO] Packet of ID : 2 contains errors. ACK FALSE.
+[INFO] Packet of ID : 1 has been DELETED from system.

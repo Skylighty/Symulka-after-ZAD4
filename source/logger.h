@@ -3,6 +3,9 @@
 #include <string>
 #include <fstream>
 
+//Logger saves it's output to log_file.txt located in \..\make directory.
+//Don't know how to change the file save path eventually.
+
 class Logger
 {
 public:

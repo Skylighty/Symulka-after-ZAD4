@@ -20,7 +20,7 @@ public:
     CHECK
   };
 
-  Packet(uint32_t did, WirelessNetwork* network);
+  Packet(uint32_t did, WirelessNetwork* &network);
   ~Packet();
   void WaitCRP();                              //Waits the CRP time during retransmission
   void WaitCP();                               //Waits CP time during channel checking

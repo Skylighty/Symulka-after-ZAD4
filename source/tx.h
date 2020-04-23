@@ -17,6 +17,7 @@ public:
   void SetTXPacket(Packet* packet) { this->current_packet_ = packet; }    //Sets packet as currently serviced by TX
   bool BufferEmpty() { return this->buffer_->empty(); }                   //Returns whether buffer is empty or not
   uint32_t GetTXID() { return this->tx_id_; }                             //Returns very own TX's ID
+  Packet* GetCurrentPacket() { return this->current_packet_; }
   
 private:
   std::queue<Packet*>* buffer_;               //Packet buffer declaration
