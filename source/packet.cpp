@@ -5,7 +5,7 @@
 #include "rx.h"
 #include "tx.h"
 
-Packet::Packet(uint32_t did, WirelessNetwork* &network)
+Packet::Packet(uint32_t did, WirelessNetwork* network)
 {
   state_ = State::CREATED;
   error_ = false;
@@ -17,9 +17,10 @@ Packet::Packet(uint32_t did, WirelessNetwork* &network)
   network_ = network;
   retransmission_ = false;
   collision_ = false;
+  terminated_ = false;
   r_ = 0;
   t_ = 0;
-  this->Execute();
+  //this->Execute();
 }
 
 //TODO - Safe deleting packet from vector after hitting retransmission cap or successful transmission end. 
@@ -208,13 +209,34 @@ void Packet::StateCheck()
       state_ = State::WAITING;
     }
     else
+    {
       //If ack flag set to true, delete packet and output a success transmission message.
+      this->terminated_ = true;
+      CurrentTX->SetTXPacket(nullptr);
       logger_->Info("Packet of ID : " + pid + " reached retransmission cap.");
+      if (CurrentTX->BufferEmpty() == false) //If TX's buffer isn't empty, after deleting packet from system pop new from buffer and set it as current.
+      {
+        CurrentTX->SetTXPacket(CurrentTX->PacketFromBuffer());
+        CurrentTX->PopFromBuffer();
+      }
+      else if ((CurrentTX->BufferEmpty() == true) && (CurrentTX->GetCurrentPacket() == nullptr))
+        network_->GeneratePacket(CurrentTX->GetTXID(), network_);
       delete this;
+    }
   }
   else
   {
+    this->terminated_ = true;
+    CurrentTX->SetTXPacket(nullptr);
     logger_->Info("Packet of ID : " + pid + " transmitted successfully");
+    //delete this;
+    if (CurrentTX->BufferEmpty() == false)
+    {
+      CurrentTX->SetTXPacket(CurrentTX->PacketFromBuffer());
+      CurrentTX->PopFromBuffer();
+    }
+    else if ((CurrentTX->BufferEmpty() == true) && (CurrentTX->GetCurrentPacket() == nullptr))
+      network_->GeneratePacket(CurrentTX->GetTXID(), network_);
     delete this;
   }
 }

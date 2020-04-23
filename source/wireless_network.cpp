@@ -5,7 +5,6 @@ WirelessNetwork::WirelessNetwork()
   channel_ = new Channel();
   TXList = new std::vector<TX*>;
   RXList = new std::vector<RX*>;
-  PacketList = new std::vector<Packet*>;
   packet_count = 0;
   this->GenerateRXTX();
 }
@@ -24,7 +23,7 @@ void WirelessNetwork::GenerateRXTX()
 void WirelessNetwork::GeneratePacket(uint32_t did, WirelessNetwork* wn)
 {
   Packet* new_packet = new Packet(did, wn);
-  this->PacketList->push_back(new_packet);
+  new_packet->Execute();
   ++this->packet_count;
 }
 

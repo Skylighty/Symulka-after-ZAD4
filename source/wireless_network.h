@@ -20,7 +20,6 @@ public:
   Channel* channel_;                                        //Channel declaration (didn't want to make it private, it's much simpler and comfy this way actually)
   int const kMaxRetransmissions = 10;                       //Const representing maximal retransmission number
   int const kDeviceCount_ = 4;                              //Const representing number of RX/TX pairs
-  std::vector<Packet*>* PacketList;
 private:
   uint32_t packet_count;                                    //Variable that stores total packet count transmitted in system
   std::vector<TX*>* TXList;                                 //Vector container of all TXs

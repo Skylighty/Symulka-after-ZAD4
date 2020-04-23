@@ -29,13 +29,13 @@ int main(char** args[])
     //That's because removing packets from list not implemented yet
     //So program appeals to a place in the memory that doesn't exists anymore
     
-    wnet->PacketList->at(0)->Execute();
+    wnet->GetTX(1)->GetCurrentPacket()->Execute();
     waiter(1);
-    wnet->PacketList->at(1)->Execute();
+    wnet->GetTX(2)->GetCurrentPacket()->Execute();
     waiter(1);
-    wnet->PacketList->at(2)->Execute();
+    wnet->GetTX(3)->GetCurrentPacket()->Execute();
     waiter(1);
-    wnet->PacketList->at(3)->Execute();
+    wnet->GetTX(4)->GetCurrentPacket()->Execute();
     waiter(1);
   }
   return 0;
