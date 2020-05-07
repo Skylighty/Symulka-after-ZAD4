@@ -42,7 +42,7 @@ void Simulation::Run(int time) {
       if (process->IsTerminated())
         delete process;
     }
-    std::cout << "Successfully transmitted packets : " + std::to_string(wireless_network_->GetSuccessPackets()) << std::endl;
+    std::cout << "\nSuccessfully transmitted packets : " + std::to_string(wireless_network_->GetSuccessPackets()) << std::endl;
     std::cout << "Packets which transmission has been failed : " + std::to_string(wireless_network_->GetDeadPackets()) << std::endl;
 }
 
