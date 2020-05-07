@@ -254,8 +254,8 @@ void Packet::StateCheck() {
 bool Packet::CheckForErrors() {
     //TODO - Implement checking for errors - for now just a rand TER error
   srand(time(nullptr));
-    int chance = (rand() % 10)+1;
-    if (chance <= 7) {return true;}
+    int chance = (rand() % 100)+1;
+    if (chance <= 20) {return true;}
     else {return false;}
 }
 
