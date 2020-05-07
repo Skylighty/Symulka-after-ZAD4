@@ -1,53 +1,50 @@
 #include "wireless_network.h"
 #include <Windows.h>
-WirelessNetwork::WirelessNetwork()
-{
-  channel_ = new Channel();
-  TXList = new std::vector<TX*>;
-  RXList = new std::vector<RX*>;
-  packet_count = 0;
-  this->GenerateRXTX();
+
+WirelessNetwork::WirelessNetwork() {
+    channel_ = new Channel();
+    TXList = new std::vector<TX *>;
+    RXList = new std::vector<RX *>;
+    packet_count = 0;
+    successful_packets_ = 0;
+    dead_packets_ = 0;
+    logger = new Logger();
+    this->GenerateRXTX();
 }
 
-void WirelessNetwork::GenerateRXTX()
-{
-  for (int i = 1; i < (kDeviceCount_+1); ++i)
-  {
-    TX* new_tx = new TX(i);
-    TXList->push_back(new_tx);
-    RX* new_rx = new RX(i);
-    RXList->push_back(new_rx);
+void WirelessNetwork::GenerateRXTX() {
+    for (int i = 1; i < (kDeviceCount_ + 1); ++i) {
+        TX *new_tx = new TX(i);
+        TXList->push_back(new_tx);
+        RX *new_rx = new RX(i);
+        RXList->push_back(new_rx);
+    }
+}
+
+//Correction - fixed warning of case that function returns nothing
+//Kinda dangerous to make it this way, but I don't know how to make it other way, will work properly anyway
+//Same goes for GetRX function.
+TX *WirelessNetwork::GetTX(int id) {
+  TX *checked_tx = nullptr;
+  //Starting at 0, because here we check the vector, not index concretely
+  for (int i = 0; i < (kDeviceCount_); ++i) {
+        checked_tx = TXList->at(i);
+        if (checked_tx->GetTXID() == id) {
+          break;
+        }
+    }
+  return checked_tx;
+}
+
+RX *WirelessNetwork::GetRX(int id) {
+  RX *checked_rx = nullptr;
+  for (int i = 0; i < (kDeviceCount_); ++i) {
+        checked_rx = RXList->at(i);
+        if (checked_rx->GetRXID() == id)
+            break;
   }
+  return checked_rx;
 }
 
-void WirelessNetwork::GeneratePacket(uint32_t did, WirelessNetwork* wn)
-{
-  Packet* new_packet = new Packet(did, wn);
-  new_packet->Execute();
-  ++this->packet_count;
-}
 
-void WirelessNetwork::WaitCGPk()
-{
-  Sleep(5);
-}
 
-TX* WirelessNetwork::GetTX(int id)
-{
-  for (int i = 0; i < (TXList->size()); ++i)
-  {
-    TX* checked_tx = TXList->at(i);
-    if (checked_tx->GetTXID() == id)
-      return checked_tx;
-  }
-}
-
-RX* WirelessNetwork::GetRX(int id)
-{
-  for (int i = 0; i < (RXList->size()); ++i)
-  {
-    RX* checked_rx = RXList->at(i);
-    if (checked_rx->GetRXID() == id)
-      return checked_rx;
-  }
-}

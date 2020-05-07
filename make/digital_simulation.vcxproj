@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClCompile Include="..\source\channel.cpp" />
     <ClCompile Include="..\source\logger.cpp" />
+    <ClCompile Include="..\source\main.cpp" />
     <ClCompile Include="..\source\packet.cpp" />
     <ClCompile Include="..\source\process.cpp" />
     <ClCompile Include="..\source\rx.cpp" />
@@ -34,6 +35,7 @@
     <ClInclude Include="..\source\packet.h" />
     <ClInclude Include="..\source\process.h" />
     <ClInclude Include="..\source\rx.h" />
+    <ClInclude Include="..\source\Simulation.h" />
     <ClInclude Include="..\source\tx.h" />
     <ClInclude Include="..\source\wireless_network.h" />
   </ItemGroup>

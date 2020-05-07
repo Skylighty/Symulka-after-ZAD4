@@ -1,42 +1,75 @@
 #include "wireless_network.h"
-#include <chrono>
-#include <thread>
+#include "Simulation.h"
+#include "process.h"
+#include "packet.h"
+#include <iostream>
 
-void waiter(int time_in_secs)
-{
-  std::this_thread::sleep_until(std::chrono::system_clock::now() + std::chrono::seconds(time_in_secs));
+Simulation::Simulation(WirelessNetwork *wireless_network) {
+    wireless_network_ = wireless_network;
 }
 
-int main(char** args[]) 
-{
-  //|=================================WARNING==================================|
-  //|This was implemented just for checking if the Execute() method works fine.|
-  //|==========================================================================|
-
-  std::queue<Process*>* Agenda = new std::queue<Process*>;
-  WirelessNetwork* wnet = new WirelessNetwork();
-  wnet->GeneratePacket(1, wnet);
-  waiter(1);
-  wnet->GeneratePacket(2, wnet);
-  waiter(1);
-  wnet->GeneratePacket(3, wnet);
-  waiter(1);
-  wnet->GeneratePacket(4, wnet);
-  waiter(1);
-  while (true)
-  {
-    //After transmitting the first packet exception will occur.
-    //That's because removing packets from list not implemented yet
-    //So program appeals to a place in the memory that doesn't exists anymore
+void Simulation::Run(int time) {
+  //Simulation starts at clock = 0
+  clock_ = 0;
+    std::cout << " >>> Started simulation with method M4 - Process interaction <<< \n";
     
-    wnet->GetTX(1)->GetCurrentPacket()->Execute();
-    waiter(1);
-    wnet->GetTX(2)->GetCurrentPacket()->Execute();
-    waiter(1);
-    wnet->GetTX(3)->GetCurrentPacket()->Execute();
-    waiter(1);
-    wnet->GetTX(4)->GetCurrentPacket()->Execute();
-    waiter(1);
-  }
-  return 0;
+  //LAMBDA Function declaration for segregation of priority queue - our agenda
+  auto cmp = [](Process *left, Process *right) { return left->GetTime() > right->GetTime(); };
+  
+    Process::Agenda agenda(cmp); //Agenda being made
+    //Generating start packet for every 1 of RXTX pairs
+    for (int i = 1; i < (wireless_network_->kDeviceCount_+1); ++i) {
+        auto new_packet = new Packet(i, wireless_network_, clock_, &agenda, wireless_network_->logger);
+        new_packet->Activate(0);
+    }
+    //=======================================================
+    //====================- MAIN LOOP -======================
+    //=======================================================
+    //Loop basically runs untill simulation time is lesser than the time we want to simulte, conversion to size_t btw.
+    while (clock_ < static_cast<size_t>(time))
+    {
+      //Declaration to access a process to put down from agenda and execute loop for
+      Process* process = agenda.top();
+      //Taking process down from agenda
+      agenda.pop();
+      //Clock update
+      clock_ = process->GetTime();
+      //Simulation time put to screen
+      std::cout << "Simulation Time : " << clock_ << "\n";
+      //Execution of a current process state
+      process->Execute();
+      //If transmission ended delete the process and dont put it back to agenda :)
+      if (process->IsTerminated())
+        delete process;
+    }
+    std::cout << "Successfully transmitted packets : " + std::to_string(wireless_network_->GetSuccessPackets()) << std::endl;
+    std::cout << "Packets which transmission has been failed : " + std::to_string(wireless_network_->GetDeadPackets()) << std::endl;
 }
+
+void Simulation::RunAsSteps(int time) {
+  //Simulation starts at clock = 0
+  clock_ = 0;
+  std::cout << " >>> Started simulation with method M4 - Process interaction <<< \n";
+  auto cmp = [](Process *left, Process *right) { return left->GetTime() > right->GetTime(); }; //Lambda for agenda
+  Process::Agenda agenda(cmp);
+  for (int i = 1; i < (wireless_network_->kDeviceCount_+1); i++) {
+    auto new_packet = new Packet(i, wireless_network_, clock_, &agenda, wireless_network_->logger);
+    new_packet->Activate(0);
+  }
+  while (clock_ < static_cast<size_t>(time))
+  {
+    Process* process = agenda.top();
+    agenda.pop();
+    clock_ = process->GetTime();
+    std::cout << "Simulation Time : " << clock_ << "\n";
+    std::cout << "Press ENTER to continue....";
+    //------- IMPLEMENTATION OF STEP RUNNING-------------
+    getchar();
+    process->Execute();
+    if (process->IsTerminated())
+      delete process;
+  }
+  std::cout << "Successfully transmitted packets : " + std::to_string(wireless_network_->GetSuccessPackets()) << std::endl;
+  std::cout << "Packets which transmission has been failed : " + std::to_string(wireless_network_->GetDeadPackets()) << std::endl;
+}
+
