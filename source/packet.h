@@ -31,6 +31,7 @@ public:
     bool CheckForErrors();                       //Checks if packet run in some errors during transmission
     bool CheckForCollision();                    //Checks if collision occured during transmission
     void GenerateNext();                         //Method that generates new packet basing on THIS one
+    uint32_t GetPacketId() {return packet_id_;}
     //------------------------==+ STATE SPECIFIC METHODS +==--------------------------
     // I added these methods just to make the code more structured and easier to read
     void StateCreated();
@@ -47,7 +48,10 @@ public:
 
     void StateCheck();
     
+    //-------- TIME FUNCTIONS--------------------
+    
     size_t CalculateCPTime() { return cp_time_*t_;}
+    void SetCollision(bool collision) { collision_ = collision; }
     
     //--------------------------------------------------------------------------------
 
@@ -69,7 +73,7 @@ private:
     size_t cgp_time_;               //Value of current packet's CGP time
     bool error_;                    //Error occured flag
     bool ack_;                      //ACK flag
-    bool active_;                   //Active flag to execute the process
+    bool active_;
     bool collision_;                //Collision occured flag
     bool retransmission_;           //Obligatory retransmission flag
 };

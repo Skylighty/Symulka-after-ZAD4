@@ -16,7 +16,7 @@ void Simulation::Run(int time) {
   //LAMBDA Function declaration for segregation of priority queue - our agenda
   auto cmp = [](Process *left, Process *right) { return left->GetTime() > right->GetTime(); };
   
-    Process::Agenda agenda(cmp); //Agenda being made
+    Packet::Agenda agenda(cmp); //Agenda being made
     //Generating start packet for every 1 of RXTX pairs
     for (int i = 1; i < (wireless_network_->kDeviceCount_+1); ++i) {
         auto new_packet = new Packet(i, wireless_network_, clock_, &agenda, wireless_network_->logger);
@@ -35,15 +35,17 @@ void Simulation::Run(int time) {
       //Clock update
       clock_ = process->GetTime();
       //Simulation time put to screen
-      std::cout << "Simulation Time : " << clock_ << "\n";
+      wireless_network_->logger->Info("Simulation time : " + std::to_string(clock_));
       //Execution of a current process state
       process->Execute();
       //If transmission ended delete the process and dont put it back to agenda :)
       if (process->IsTerminated())
+      {
         delete process;
+      }
     }
-    std::cout << "\nSuccessfully transmitted packets : " + std::to_string(wireless_network_->GetSuccessPackets()) << std::endl;
-    std::cout << "Packets which transmission has been failed : " + std::to_string(wireless_network_->GetDeadPackets()) << std::endl;
+    wireless_network_->logger->Info("\nSuccessfully transmitted packets : " + std::to_string(wireless_network_->GetSuccessPackets()));
+    wireless_network_->logger->Info("Packets which transmission has been failed : " + std::to_string(wireless_network_->GetDeadPackets()));
 }
 
 void Simulation::RunAsSteps(int time) {

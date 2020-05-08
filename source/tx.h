@@ -24,7 +24,6 @@ public:
     bool BufferEmpty() { return buffer_->empty(); }                   //Returns whether buffer is empty or not
     int GetTXID() { return tx_id_; }                             //Returns very own TX's ID
     Packet *GetCurrentPacket() { return current_packet_; }
-
 private:
     std::queue<Packet *> *buffer_;               //Packet buffer declaration
     int tx_id_;                            //Very own TX's ID

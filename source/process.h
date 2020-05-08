@@ -15,6 +15,7 @@ public:
 
     virtual void Execute() = 0;              //Execute method to overwrite
     Process(size_t time, WirelessNetwork* wireless_network, Agenda* agenda);
+    virtual ~Process();
     void Activate(size_t time, bool relative = true);  //Activate time management method to overwrite
     bool IsTerminated() { return terminated_; }
 

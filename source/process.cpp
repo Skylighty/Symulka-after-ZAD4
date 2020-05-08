@@ -11,3 +11,8 @@ void Process::Activate(size_t time, bool relative) {
     }
     agenda_->push(this);
 }
+
+Process::~Process()
+{
+
+}
