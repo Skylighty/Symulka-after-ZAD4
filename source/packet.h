@@ -3,6 +3,7 @@
 
 #include "process.h"
 #include "logger.h"
+#include "generator.h"
 
 class Channel;              //Necessary includes to avoid Constructor replacement & conflict
 class WirelessNetwork;
@@ -26,14 +27,19 @@ public:
 
     void Execute() override;                     //Overrided excecute method for our process
     //TODO - Implement random variables nad RNG
-    double GenerateR();                          //Generates R random variable depending on "r" counter value
-    double GenerateT();                          //Generates T random variable depending on "t" channel checks counter
-    bool CheckForErrors();                       //Checks if packet run in some errors during transmission
+    int GenerateR();                          //Generates R random variable depending on "r" counter value
+    int GenerateT();                          //Generates T random variable depending on "t" channel checks counter
+    int GenerateCP();
+    int GenerateCTP();
+    int GenerateCRP();
+    static bool CheckForErrors();                       //Checks if packet run in some errors during transmission
     bool CheckForCollision();                    //Checks if collision occured during transmission
     void GenerateNext();                         //Method that generates new packet basing on THIS one
     uint32_t GetPacketId() {return packet_id_;}
+    
     //------------------------==+ STATE SPECIFIC METHODS +==--------------------------
     // I added these methods just to make the code more structured and easier to read
+    
     void StateCreated();
 
     void StateWaiting();
@@ -50,14 +56,14 @@ public:
     
     //-------- TIME FUNCTIONS--------------------
     
-    size_t CalculateCPTime() { return cp_time_*t_;}
+    //size_t CalculateCPTime() { return cp_time_*t_;}
     void SetCollision(bool collision) { collision_ = collision; }
     
     //--------------------------------------------------------------------------------
 
-
-
+    
 private:
+    int ctp_time_;
     State state_;                   //Enum class object to implement the phases of process
     WirelessNetwork *network_;      //Pointer to wirelessnetwork object, necessary for whole implementation
     Logger *logger_;                //Our logger object
@@ -67,10 +73,10 @@ private:
     uint32_t t_;                    //Channel check coutner
     double T_;                      //Random variable T value
     double R_;                      //Random variable R value
-    size_t cp_time_;                //Value of current packet's CP time
+/*    size_t cp_time_;                //Value of current packet's CP time
     size_t crp_time_;               //Value of current packet's CRP time
     size_t ctp_time_;               //Value of current packet's CTP time
-    size_t cgp_time_;               //Value of current packet's CGP time
+    size_t cgp_time_;               //Value of current packet's CGP time*/
     bool error_;                    //Error occured flag
     bool ack_;                      //ACK flag
     bool active_;

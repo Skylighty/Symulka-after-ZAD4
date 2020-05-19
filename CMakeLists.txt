@@ -6,6 +6,8 @@ set(CMAKE_CXX_STANDARD 14)
 include_directories(source)
 
 add_executable(_Symulka_NOWA
+        source/generator.h
+        source/generator.cpp
     source/channel.cpp
     source/channel.h
     source/logger.cpp
@@ -23,3 +25,4 @@ add_executable(_Symulka_NOWA
     source/tx.h
     source/wireless_network.cpp
     source/wireless_network.h)
+

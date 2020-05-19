@@ -9,19 +9,19 @@
 
 class WirelessNetwork {
 public:
-    WirelessNetwork();
+    WirelessNetwork(double lambda, std::vector<std::queue<int>*>* svector);
 
     ~WirelessNetwork();
 
     //void Init();                                              //Method that prepares
-    void
-    GenerateRXTX();                                           //Method that creates RXs and TXs specified by constant kDeviceCount attribute
+    void GenerateRXTX();                                           //Method that creates RXs and TXs specified by constant kDeviceCount attribute
     uint32_t GetPacketCount() { return this->packet_count; }  //Returns total count of packets transmitted by system
     void IncPacketCount() { ++packet_count;}
     void IncSuccessPacket(){++successful_packets_;}
     void IncDeadPacket(){++dead_packets_;}
     uint32_t GetSuccessPackets() {return successful_packets_;}
     uint32_t GetDeadPackets() {return dead_packets_;}
+    double GetLambda() {return lambda_;}
     TX *GetTX(int id);                                        //Returns TX of particular device ID
     RX *GetRX(int id);                                        //Same as above, but for RX
     Channel *channel_;                                        //Channel declaration (didn't want to make it private, it's much simpler and comfy this way actually)
@@ -29,6 +29,8 @@ public:
     int const kDeviceCount_ = 4;                              //Const representing number of RX/TX pairs
     Logger* logger;
 private:
+    double lambda_;
+    std::vector<std::queue<int>*>* seed_vector_;
     uint32_t packet_count;                                    //Variable that stores total packet count transmitted in system
     uint32_t successful_packets_;
     uint32_t dead_packets_;
