@@ -8,7 +8,8 @@ Simulation::Simulation(WirelessNetwork *wireless_network) {
     wireless_network_ = wireless_network;
 }
 
-void Simulation::Run(int time) {
+void Simulation::Run(int time)
+{
   //Simulation starts at clock = 0
   clock_ = 0;
     std::cout << " >>> Started simulation with method M4 - Process interaction <<< \n";
@@ -26,18 +27,24 @@ void Simulation::Run(int time) {
     //====================- MAIN LOOP -======================
     //=======================================================
     //Loop basically runs untill simulation time is lesser than the time we want to simulte, conversion to size_t btw.
+    
     while (clock_ < static_cast<size_t>(time))
     {
       //Declaration to access a process to put down from agenda and execute loop for
       Process* process = agenda.top();
+      
       //Taking process down from agenda
       agenda.pop();
+      
       //Clock update
       clock_ = process->GetTime();
+      
       //Simulation time put to screen
       wireless_network_->logger->Info("Simulation time : " + std::to_string(clock_));
+      
       //Execution of a current process state
       process->Execute();
+      
       //If transmission ended delete the process and dont put it back to agenda :)
       if (process->IsTerminated())
       {

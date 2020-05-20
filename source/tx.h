@@ -4,12 +4,13 @@
 #include <cstdint>
 #include <queue>
 #include "packet.h"
+#include "generator.h"
 
 class WirelessNetwork;
 
 class TX {
 public:
-    TX(int id);
+    TX(int id, std::queue<int> &sq);
 
     ~TX();
 
@@ -23,8 +24,21 @@ public:
     void SetTXPacket(Packet *packet) { current_packet_ = packet; }    //Sets packet as currently serviced by TX
     bool BufferEmpty() { return buffer_->empty(); }                   //Returns whether buffer is empty or not
     int GetTXID() { return tx_id_; }                             //Returns very own TX's ID
+    void SetNetwork(WirelessNetwork *network) {network_ = network;}
+    void SetSeedQueue(std::queue<int> seed_queue) {seeds = seed_queue;}
     Packet *GetCurrentPacket() { return current_packet_; }
+    int GetSeed();
+    void InitializeGenerators();
+    Generator* GeneratorCP;
+    Generator* GeneratorCTP;
+    Generator* GeneratorCRP;
+    Generator* GeneratorCGP;
+    Generator* GeneratorR;
+    Generator* GeneratorT;
+    Generator* GeneratorTER;
 private:
+    WirelessNetwork *network_;
+    std::queue<int> seeds;
     std::queue<Packet *> *buffer_;               //Packet buffer declaration
     int tx_id_;                            //Very own TX's ID
     Packet *current_packet_;                    //Currently serviced packet
