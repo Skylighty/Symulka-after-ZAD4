@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="_Symulka_NOWA"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="E:/!_STUDIA_!/SEMESTR 6/LABORKI/!Symulka_NOWA/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="C:/MinGW/bin/mingw32-make.exe -f &quot;E:/!_STUDIA_!/SEMESTR 6/LABORKI/!Symulka_NOWA/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="C:/MinGW/bin/mingw32-make.exe -f &quot;E:/!_STUDIA_!/SEMESTR 6/LABORKI/!Symulka_NOWA/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/MinGW/bin/mingw32-make.exe -f &quot;E:/!_STUDIA_!/SEMESTR 6/LABORKI/!Symulka_NOWA/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/MinGW/bin/mingw32-make.exe -f &quot;E:/!_STUDIA_!/SEMESTR 6/LABORKI/!Symulka_NOWA/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="_Symulka_NOWA">
+				<Option output="E:/!_STUDIA_!/SEMESTR 6/LABORKI/!Symulka_NOWA/cmake-build-debug/_Symulka_NOWA.exe" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="E:/!_STUDIA_!/SEMESTR 6/LABORKI/!Symulka_NOWA/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="E:/!_STUDIA_!/SEMESTR 6/LABORKI/!Symulka_NOWA/source"/>
+					<Add directory="c:\mingw\bin\../lib/gcc/mingw32/9.2.0/include/c++"/>
+					<Add directory="c:\mingw\bin\../lib/gcc/mingw32/9.2.0/include/c++/mingw32"/>
+					<Add directory="c:\mingw\bin\../lib/gcc/mingw32/9.2.0/include/c++/backward"/>
+					<Add directory="c:\mingw\bin\../lib/gcc/mingw32/9.2.0/include"/>
+					<Add directory="c:\mingw\bin\../lib/gcc/mingw32/9.2.0/../../../../include"/>
+					<Add directory="c:\mingw\bin\../lib/gcc/mingw32/9.2.0/include-fixed"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="C:/MinGW/bin/mingw32-make.exe -f &quot;E:/!_STUDIA_!/SEMESTR 6/LABORKI/!Symulka_NOWA/cmake-build-debug/Makefile&quot;  VERBOSE=1 _Symulka_NOWA"/>
+					<CompileFile command="C:/MinGW/bin/mingw32-make.exe -f &quot;E:/!_STUDIA_!/SEMESTR 6/LABORKI/!Symulka_NOWA/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/MinGW/bin/mingw32-make.exe -f &quot;E:/!_STUDIA_!/SEMESTR 6/LABORKI/!Symulka_NOWA/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/MinGW/bin/mingw32-make.exe -f &quot;E:/!_STUDIA_!/SEMESTR 6/LABORKI/!Symulka_NOWA/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="_Symulka_NOWA/fast">
+				<Option output="E:/!_STUDIA_!/SEMESTR 6/LABORKI/!Symulka_NOWA/cmake-build-debug/_Symulka_NOWA.exe" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="E:/!_STUDIA_!/SEMESTR 6/LABORKI/!Symulka_NOWA/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="E:/!_STUDIA_!/SEMESTR 6/LABORKI/!Symulka_NOWA/source"/>
+					<Add directory="c:\mingw\bin\../lib/gcc/mingw32/9.2.0/include/c++"/>
+					<Add directory="c:\mingw\bin\../lib/gcc/mingw32/9.2.0/include/c++/mingw32"/>
+					<Add directory="c:\mingw\bin\../lib/gcc/mingw32/9.2.0/include/c++/backward"/>
+					<Add directory="c:\mingw\bin\../lib/gcc/mingw32/9.2.0/include"/>
+					<Add directory="c:\mingw\bin\../lib/gcc/mingw32/9.2.0/../../../../include"/>
+					<Add directory="c:\mingw\bin\../lib/gcc/mingw32/9.2.0/include-fixed"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="C:/MinGW/bin/mingw32-make.exe -f &quot;E:/!_STUDIA_!/SEMESTR 6/LABORKI/!Symulka_NOWA/cmake-build-debug/Makefile&quot;  VERBOSE=1 _Symulka_NOWA/fast"/>
+					<CompileFile command="C:/MinGW/bin/mingw32-make.exe -f &quot;E:/!_STUDIA_!/SEMESTR 6/LABORKI/!Symulka_NOWA/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/MinGW/bin/mingw32-make.exe -f &quot;E:/!_STUDIA_!/SEMESTR 6/LABORKI/!Symulka_NOWA/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/MinGW/bin/mingw32-make.exe -f &quot;E:/!_STUDIA_!/SEMESTR 6/LABORKI/!Symulka_NOWA/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="E:/!_STUDIA_!/SEMESTR 6/LABORKI/!Symulka_NOWA/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="C:/MinGW/bin/mingw32-make.exe -f &quot;E:/!_STUDIA_!/SEMESTR 6/LABORKI/!Symulka_NOWA/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="C:/MinGW/bin/mingw32-make.exe -f &quot;E:/!_STUDIA_!/SEMESTR 6/LABORKI/!Symulka_NOWA/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/MinGW/bin/mingw32-make.exe -f &quot;E:/!_STUDIA_!/SEMESTR 6/LABORKI/!Symulka_NOWA/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/MinGW/bin/mingw32-make.exe -f &quot;E:/!_STUDIA_!/SEMESTR 6/LABORKI/!Symulka_NOWA/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="E:/!_STUDIA_!/SEMESTR 6/LABORKI/!Symulka_NOWA/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="C:/MinGW/bin/mingw32-make.exe -f &quot;E:/!_STUDIA_!/SEMESTR 6/LABORKI/!Symulka_NOWA/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="C:/MinGW/bin/mingw32-make.exe -f &quot;E:/!_STUDIA_!/SEMESTR 6/LABORKI/!Symulka_NOWA/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/MinGW/bin/mingw32-make.exe -f &quot;E:/!_STUDIA_!/SEMESTR 6/LABORKI/!Symulka_NOWA/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/MinGW/bin/mingw32-make.exe -f &quot;E:/!_STUDIA_!/SEMESTR 6/LABORKI/!Symulka_NOWA/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="E:/!_STUDIA_!/SEMESTR 6/LABORKI/!Symulka_NOWA/source/Simulation.cpp">
+			<Option target="_Symulka_NOWA"/>
+		</Unit>
+		<Unit filename="E:/!_STUDIA_!/SEMESTR 6/LABORKI/!Symulka_NOWA/source/Simulation.h">
+			<Option target="_Symulka_NOWA"/>
+		</Unit>
+		<Unit filename="E:/!_STUDIA_!/SEMESTR 6/LABORKI/!Symulka_NOWA/source/channel.cpp">
+			<Option target="_Symulka_NOWA"/>
+		</Unit>
+		<Unit filename="E:/!_STUDIA_!/SEMESTR 6/LABORKI/!Symulka_NOWA/source/channel.h">
+			<Option target="_Symulka_NOWA"/>
+		</Unit>
+		<Unit filename="E:/!_STUDIA_!/SEMESTR 6/LABORKI/!Symulka_NOWA/source/generator.cpp">
+			<Option target="_Symulka_NOWA"/>
+		</Unit>
+		<Unit filename="E:/!_STUDIA_!/SEMESTR 6/LABORKI/!Symulka_NOWA/source/generator.h">
+			<Option target="_Symulka_NOWA"/>
+		</Unit>
+		<Unit filename="E:/!_STUDIA_!/SEMESTR 6/LABORKI/!Symulka_NOWA/source/logger.cpp">
+			<Option target="_Symulka_NOWA"/>
+		</Unit>
+		<Unit filename="E:/!_STUDIA_!/SEMESTR 6/LABORKI/!Symulka_NOWA/source/logger.h">
+			<Option target="_Symulka_NOWA"/>
+		</Unit>
+		<Unit filename="E:/!_STUDIA_!/SEMESTR 6/LABORKI/!Symulka_NOWA/source/main.cpp">
+			<Option target="_Symulka_NOWA"/>
+		</Unit>
+		<Unit filename="E:/!_STUDIA_!/SEMESTR 6/LABORKI/!Symulka_NOWA/source/packet.cpp">
+			<Option target="_Symulka_NOWA"/>
+		</Unit>
+		<Unit filename="E:/!_STUDIA_!/SEMESTR 6/LABORKI/!Symulka_NOWA/source/packet.h">
+			<Option target="_Symulka_NOWA"/>
+		</Unit>
+		<Unit filename="E:/!_STUDIA_!/SEMESTR 6/LABORKI/!Symulka_NOWA/source/process.cpp">
+			<Option target="_Symulka_NOWA"/>
+		</Unit>
+		<Unit filename="E:/!_STUDIA_!/SEMESTR 6/LABORKI/!Symulka_NOWA/source/process.h">
+			<Option target="_Symulka_NOWA"/>
+		</Unit>
+		<Unit filename="E:/!_STUDIA_!/SEMESTR 6/LABORKI/!Symulka_NOWA/source/rx.cpp">
+			<Option target="_Symulka_NOWA"/>
+		</Unit>
+		<Unit filename="E:/!_STUDIA_!/SEMESTR 6/LABORKI/!Symulka_NOWA/source/rx.h">
+			<Option target="_Symulka_NOWA"/>
+		</Unit>
+		<Unit filename="E:/!_STUDIA_!/SEMESTR 6/LABORKI/!Symulka_NOWA/source/tx.cpp">
+			<Option target="_Symulka_NOWA"/>
+		</Unit>
+		<Unit filename="E:/!_STUDIA_!/SEMESTR 6/LABORKI/!Symulka_NOWA/source/tx.h">
+			<Option target="_Symulka_NOWA"/>
+		</Unit>
+		<Unit filename="E:/!_STUDIA_!/SEMESTR 6/LABORKI/!Symulka_NOWA/source/wireless_network.cpp">
+			<Option target="_Symulka_NOWA"/>
+		</Unit>
+		<Unit filename="E:/!_STUDIA_!/SEMESTR 6/LABORKI/!Symulka_NOWA/source/wireless_network.h">
+			<Option target="_Symulka_NOWA"/>
+		</Unit>
+		<Unit filename="E:/!_STUDIA_!/SEMESTR 6/LABORKI/!Symulka_NOWA/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>
