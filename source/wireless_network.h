@@ -9,7 +9,7 @@
 
 class WirelessNetwork {
 public:
-    WirelessNetwork();
+    WirelessNetwork(double lambda, std::vector<std::queue<int>> &svector);
 
     ~WirelessNetwork();
 
@@ -24,11 +24,14 @@ public:
     uint32_t GetDeadPackets() {return dead_packets_;}
     TX *GetTX(int id);                                        //Returns TX of particular device ID
     RX *GetRX(int id);                                        //Same as above, but for RX
+    double GetLambda() {return lambda_;}
     Channel *channel_;                                        //Channel declaration (didn't want to make it private, it's much simpler and comfy this way actually)
     int const kMaxRetransmissions = 10;                       //Const representing maximal retransmission number
     int const kDeviceCount_ = 4;                              //Const representing number of RX/TX pairs
     Logger* logger;
 private:
+    double lambda_;
+    std::vector<std::queue<int>> seed_vector_;
     uint32_t packet_count;                                    //Variable that stores total packet count transmitted in system
     uint32_t successful_packets_;
     uint32_t dead_packets_;
