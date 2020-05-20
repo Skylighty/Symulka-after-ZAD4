@@ -25,3 +25,4 @@ add_executable(_Symulka_NOWA
     source/tx.h
     source/wireless_network.cpp
     source/wireless_network.h)
+

@@ -12,6 +12,7 @@ public:
     void Run(int time);
 
     void RunAsSteps(int time);
+    
 
 private:
     size_t clock_ = 0;

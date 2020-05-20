@@ -6,6 +6,7 @@
 
 Simulation::Simulation(WirelessNetwork *wireless_network) {
     wireless_network_ = wireless_network;
+    
 }
 
 void Simulation::Run(int time)
@@ -81,4 +82,6 @@ void Simulation::RunAsSteps(int time) {
   std::cout << "Successfully transmitted packets : " + std::to_string(wireless_network_->GetSuccessPackets()) << std::endl;
   std::cout << "Packets which transmission has been failed : " + std::to_string(wireless_network_->GetDeadPackets()) << std::endl;
 }
+
+
 
