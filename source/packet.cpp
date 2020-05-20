@@ -318,12 +318,12 @@ int Packet::GenerateCTP(){
 
 int Packet::GenerateCP() {
   GenerateT();
-  return (T_*ctp_time_);
+  return (T_);
 }
 
 int Packet::GenerateCRP() {
   GenerateR();
-  return (R_*ctp_time_);
+  return (R_);
 }
 
 
