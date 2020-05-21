@@ -26,10 +26,15 @@ public:
     ~Packet();
 
     void Execute() override;                     //Overrided excecute method for our process
+    
     bool CheckForErrors();                       //Checks if packet run in some errors during transmission
-    bool CheckForCollision();                    //Checks if collision occured during transmission
+    
     void GenerateNext();                         //Method that generates new packet basing on THIS one
     uint32_t GetPacketId() {return packet_id_;}
+    
+    //Packet time statistic methods - obligatory times.
+    size_t GetDelayTime() {return success_end_time_-appearence_time_;}
+    size_t GetBufforLeaveTime() {return buffor_leave_time_-appearence_time_;}
     
     //------------------------==+ STATE SPECIFIC METHODS +==--------------------------
     // I added these methods just to make the code more structured and easier to read
@@ -73,10 +78,11 @@ private:
     uint32_t devices_id_;           //ID of devices between which transmission occurs
     uint32_t r_;                    //Retransmission counter
     uint32_t t_;                    //Channel check coutner
-    uint32_t T_;                      //Random variable T value
-    uint32_t R_;                      //Random variable R value
-/*    size_t cp_time_;                //Value of current packet's CP time
-    size_t crp_time_;               //Value of current packet's CRP time*/
+    uint32_t T_;                    //Random variable T value
+    uint32_t R_;                    //Random variable R value
+    size_t buffor_leave_time_;      //Time in which packet leaves the buffer
+    size_t appearence_time_;        //Time of packet's appearence
+    size_t success_end_time_;       //Time of successful end of transmission
     size_t ctp_time_;               //Value of current packet's CTP time
     bool error_;                    //Error occured flag
     bool ack_;                      //ACK flag

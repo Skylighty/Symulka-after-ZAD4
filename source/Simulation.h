@@ -7,14 +7,17 @@ class Simulation {
 public:
     
     //Constructor explicit because takes only one parameter
-    explicit Simulation(WirelessNetwork *wireless_network);
+    explicit Simulation(WirelessNetwork *wireless_network, size_t startingtime);
 
     void Run(int time);
 
-    void RunAsSteps(int time);
+    void DisplayStatistics();
+    
+    double GetBitrate();
     
 
 private:
+    size_t starting_time_;
     size_t clock_ = 0;
     WirelessNetwork *wireless_network_;
 };

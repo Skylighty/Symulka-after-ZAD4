@@ -23,19 +23,14 @@ Packet::Packet(uint32_t did, WirelessNetwork *network, size_t time, Agenda *agen
     collision_ = false;
     terminated_ = false;
     active_ = false;
+    appearence_time_ = 0;
+    success_end_time_ = 0;
+    buffor_leave_time_ = 0;
     r_ = 0;
     t_ = 0;
     R_ = 0;
     T_ = 0;
     ctp_time_ = GenerateCTP();
-    /*std::default_random_engine generator;
-    std::uniform_int_distribution<int> distribution(1,10);
-    std::uniform_int_distribution<int> cp_distribution(30,40);
-    std::uniform_int_distribution<int> cgp_distribution (60,100);
-    crp_time_ = static_cast<size_t>((rand() % 10)+1);
-    cp_time_ = static_cast<size_t>((rand() % 10) + 1);
-    cgp_time_ = static_cast<size_t>((rand() % 10)+15);*/
-    //this->Execute();
 }
 
 
@@ -84,25 +79,30 @@ void Packet::Execute() {
 
 void Packet::StateCreated()
 {
+    //Set appearence time of packet in system
+    appearence_time_ = GetTime();
+    
     TX *CurrentTX = network_->GetTX(devices_id_);
     
     //As we create new packet upon end of transmission of the old one, we need to update simulation time
-    //Activate(cgp_time_); //TODO - Implement this in generate packet
     //Next packet is already being planned and placed for agenda
     
     GenerateNext();
     std::string pid = std::to_string(packet_id_); 
     logger_->Info("Packet of ID : " + pid + " has been created.");
-    
-    state_ = State::WAITING;  //Automatically we change state to WAITING, because here we decide what to do next
-    
+  
+    //Automatically we change state to WAITING, because here we decide what to do next
+    state_ = State::WAITING;
+  
+    //Checking if TX's packet buffer is empty or if it contains any packets
     if ((CurrentTX->BufferEmpty()) && (CurrentTX->GetCurrentPacket() ==
-                                       nullptr)) //Checking if TX's packet buffer is empty or if it contains any packets
+                                       nullptr))
     {   //If the buffer is empty, packet is immediately set as TX's current and transmitted
         logger_->Info("Buffer of TX of ID : " + std::to_string(CurrentTX->GetTXID()) +
                       " is empty. Set as current packet for TX");
         CurrentTX->SetTXPacket(this);
-    } else {   //If the buffer is NOT empty, the packet is put at the end of the TX's FIFO queue
+    } else {
+        //If the buffer is NOT empty, the packet is put at the end of the TX's FIFO queue
         logger_->Info("Buffer of TX of ID : " + std::to_string(CurrentTX->GetTXID()) +
                       " not empty. Packet put in the buffer.");
         CurrentTX->PushToBuffer(this);
@@ -112,34 +112,33 @@ void Packet::StateCreated()
 }
 
 void Packet::StateWaiting() {
-    //PACKET-FLOOD PROTECTION
-    //Here, the packet checks if the channel is busy, automatically incrementing "t" parameter - counter of channel checks
+
     std::string pid = std::to_string(packet_id_);
-    //++t_;
     if (!network_->channel_->ChannelBusy())
     {
+      //Setting the time that packet leaves TX's buffer
+      if (r_ == 0)
+        buffor_leave_time_ = GetTime();
+      
       //If channel ain't busy, the packet is passed to channel, simultaneously "t" counter restarts back to 0.
       //-----------------------------------------------
       //Correction here - channel should be set busy in StateSent, so we can implement collision
       //-----------------------------------------------
-        
         logger_->Info("Channel free, packet of ID : " + pid + " passed to the channel.");
         t_ = 0;
+        
         //Below line allows collision to occur - easy implementation (mentioned in line 133 too)
         network_->channel_->PushPacketToChannel(this);
         state_ = State::SENT;
         Activate(1);
         active_ = false;
     } else {
-      /**bool temp = network_->channel_->ChannelBusy();
-      char tempch = 'x';
-      if (temp) {tempch = 'Y';}
-      else {tempch = 'N';}
-        //If channel busy, state is not being changed, packet should wait for next channel check.
-        logger_->Debug("Channel busy?  : " + tempch);
-        logger_->Debug("Number of elements in channel : " + std::to_string(network_->channel_->CountOfPacketsInBuffer()));
-        logger_->Info("Channel busy, packet of ID : " + pid + " is still waiting.");**/
         ++t_;
+      //Setting the time that packet leaves TX's buffer
+        if (r_ == 0)
+          buffor_leave_time_ = GetTime();
+        
+      //Packet set to waiting for CP time
         Activate(GenerateCP());
         active_ = false;
     }
@@ -155,15 +154,19 @@ void Packet::StateSent() {
     state_ = State::IN_CHANNEL;
 }
 
+//Packet is inside of the channel (it's in channel's vector container for packets too)
 void Packet::StateInChannel() {
-    //Packet is inside of the channel (it's in channel's vector container for packets too)
+
     std::string pid = std::to_string(packet_id_);
-    //network_->channel_->RemovePacketFromChannel();
+
     //-----------------------------------------------
     //Correction here - packet can be removed from channel only after end of transmission!!!
     //-----------------------------------------------
+    
     logger_->Info("Packet of ID : " + pid + " passed through channel.");
-    if (CheckForErrors()) //Automatically occurance of errors IN CHANNEL is checked
+  
+    //Automatically occurance of errors IN CHANNEL is checked
+    if (CheckForErrors())
     {
       error_ = true;
     }
@@ -172,12 +175,16 @@ void Packet::StateInChannel() {
     active_ = false;
 }
 
+//Packet reaches it's destination - the receiver
 void Packet::StateReceived() {
-    //Packet reaches it's destination - the receiver
+    
+    
     std::string pid = std::to_string(packet_id_);
     RX *CurrentRX = network_->GetRX(devices_id_);
+    
+    //As packet leaves the channel it's set as a current packet serviced by particular RX
     CurrentRX->SetRXPacket(
-            this);   //As packet leaves the channel it's set as a current packet serviced by particular RX
+            this);
     logger_->Info("Packet of ID : " + pid + " received by RX of ID : " + std::to_string(CurrentRX->GetRXID()));
     if(collision_){
       logger_->Info("Packet of ID : " + pid + " occurred a collision. ACK FALSE.");
@@ -199,14 +206,15 @@ void Packet::StateReceived() {
     state_ = State::SENT_BACK;
 }
 
+//Packet is sent back to TX throught channel
 void Packet::StateSentBack() {
-    //Packet is sent back to TX throught channel
+
     std::string pid = std::to_string(packet_id_);
+    
   //-----------------------------------------------
   //Correction here - packet still in channel
   //-----------------------------------------------
-  //network_->channel_->PushPacketToChannel(this);
-  //network_->channel_->SetBusy(true); //Channel busy for ACK transmission time
+
   logger_->Info("Packet of ID : " + pid + " returning with ACK flag set through the channel.");
   state_ = State::CHECK;
   active_ = false; //Active is false because the ACK has to be transmitted through channel here
@@ -214,15 +222,12 @@ void Packet::StateSentBack() {
   
 }
 
+//Packet is set as currently serviced in TX and it's flags are being checked
 void Packet::StateCheck() {
-    //Packet is set as currently serviced in TX and it's flags are being checked
+
     TX *CurrentTX = network_->GetTX(devices_id_);
     std::string pid = std::to_string(packet_id_);
     network_->channel_->RemovePacketFromChannel(this); //Packet removed from channel again.
-    
-    //!!!!!!!!!!!!
-    //CORRECTION - Channel cant be set as free here because it gets too loop crazy
-    //network_->channel_->SetBusy(false); //Channel free after transmitting ACK
     
     if ((!ack_) && (retransmission_)) {
         //As my channel availability algorithim (A4) says - if retransmission is needed here we go:
@@ -249,19 +254,32 @@ void Packet::StateCheck() {
             CurrentTX->SetTXPacket(nullptr);
             logger_->Info("Packet of ID : " + pid + " reached retransmission cap.");
             
-          //If TX's buffer isn't empty, after deleting packet from system pop new from buffer and set it as current.
+            //If TX's buffer isn't empty, after deleting packet from system pop new from buffer and set it as current.
           
             if (! CurrentTX->BufferEmpty())
             {
                 CurrentTX->SetTXPacket(CurrentTX->PacketFromBuffer());
                 CurrentTX->PopFromBuffer();
-                network_->IncDeadPacket();
+                CurrentTX->GetCurrentPacket()->buffor_leave_time_ = GetTime();
+  
+                //Update statistics if starting phase is ended
+                if (network_->CheckIfStartingPhaseEnded())
+                {
+                  network_->IncRejectedPackets();
+                  CurrentTX->AddRejectedPacket();
+                }
+                
                 CurrentTX->GetCurrentPacket()->Activate(time_,false);
                 active_ = false;
                 terminated_ = true;
             } else if ((CurrentTX->BufferEmpty()) && (CurrentTX->GetCurrentPacket() == nullptr)) {
-                //network_->GeneratePacket(CurrentTX->GetTXID(), network_);
-                network_->IncDeadPacket();
+  
+                //Update statistics if starting phase is ended
+                if (network_->CheckIfStartingPhaseEnded())
+                {
+                  network_->IncRejectedPackets();
+                  CurrentTX->AddRejectedPacket();
+                }
                 active_ = false;
                 terminated_ = true;
             }
@@ -270,7 +288,18 @@ void Packet::StateCheck() {
       //If ack flag set to true, delete packet and output a success transmission message.
     else
       {
-      network_->IncSuccessPacket();
+        //Setting time of successful end of transmission
+        success_end_time_ = GetTime();
+        
+        //Update statistics if starting phase is ended
+        if (network_->CheckIfStartingPhaseEnded())
+        {
+          network_->IncTotalDelay(GetDelayTime());
+          network_->IncBufferTime(GetBufforLeaveTime());
+          network_->IncSuccessPacket();
+          network_->IncRetransmissions(r_);
+          CurrentTX->AddSuccessPacket();
+        }
         CurrentTX->SetTXPacket(nullptr);
         logger_->Info("Packet of ID : " + pid + " transmitted successfully");
         active_ = false; 
@@ -291,7 +320,7 @@ void Packet::StateCheck() {
 
 bool Packet::CheckForErrors() {
   TX *CurrentTX = network_->GetTX(devices_id_);
-  return (CurrentTX->GeneratorTER->RandZeroOne(0.8));
+  return (CurrentTX->GeneratorTER->RandZeroOne(0.2));
 }
 
 void Packet::GenerateNext() {
@@ -316,11 +345,15 @@ int Packet::GenerateCTP(){
   return CurrentTX->GeneratorCTP->Rand(1,10);
 }
 
+//!!!!!!!!!!!!
+//CTP scaling has been removed due to very big times which were irrelevant.
 int Packet::GenerateCP() {
   GenerateT();
   return (T_);
 }
 
+//!!!!!!!!!!!!
+//CTP scaling has been removed due to very big times which were irrelevant.
 int Packet::GenerateCRP() {
   GenerateR();
   return (R_);

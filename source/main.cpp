@@ -7,49 +7,81 @@
 #include <fstream>
 #include <memory>
 
-void Mode(Simulation* sim){
-  std::cout << "How long period of time do you want to simulate? (Input number) : ";
-  std::string time;
-  getline(std::cin, time);
-  int simtime = std::stoi(time);
-  std::cout << "Choose mode : \n" << "[1] Run continuously \n" << "[2] Run step by step\n" << "Your choice : ";
-  char choice = getchar();
-  if (choice == '1')
-    sim->Run(simtime);
-  else
-    sim->RunAsSteps(simtime);
-}
 
-void LoadSeeds(std::vector<std::queue<int>> &svector)
+//Function for loading seeds from "seeds.txt" to queue.
+void LoadSeeds(std::queue<int> &sque)
 {
   std::string line;
   std::fstream seeds;
-  seeds.open("./seeds.txt");
+  seeds.open("seeds.txt");
   if (seeds.is_open())
   {
-    for(int i = 0; i < 4; ++i)
+    while(std::getline(seeds,line))
     {
-      std::queue<int> sq;
-      for(int j = 0; j < 7; ++j)
-      {
-        std::getline(seeds, line);
-        sq.push(stoi(line));
-      }
-      svector.push_back(sq);
-      while (!sq.empty())
-        sq.pop();
+      sque.push(std::stoi(line));
     }
+
   }
 }
 
-int main(int argc, char *argv[]) {
-    //Prepare seeds for generators
-  std::vector<std::queue<int>> seeds_vector;
-    LoadSeeds(seeds_vector);
-    double L = 0.001;
-    WirelessNetwork *wireless_network = new WirelessNetwork(L, seeds_vector);
+//Function for generating seeds into "seeds.txt" file.
+void GenerateSeeds(Generator* gen)
+{
+  long long seed_iterator = 0;
+  long long end_seeds = 29000000;
+  long long seed = 0;
+  std::ofstream seeds;
+  seeds.open("seeds.txt");
+  while (seed_iterator < end_seeds)
+  {
+    seed = gen->Rand(0, 2145483647);
+    if (seed_iterator % 100000 == 0)
+    {
+      seeds << seed << "\n";
+    }
+    ++seed_iterator;
+  }
+  seeds.close();
+}
+
+int main(int argc, char *argv[])
+{
+    //Generator object for generating starting seeds
+    Generator* start_gen = new Generator(12554568);
+    GenerateSeeds(start_gen);
+    
+    //A Logger object for statistics output.
+    Logger* log = new Logger();
+    
+    //Declaring simulation times - simulating 60 seconds = 1 minute for each simulation
+    size_t simulation_time = 0;
+    size_t starting_time = 0;
+    size_t sim_time_seconds = simulation_time/1000;
+    std::cout << "\nProsze podac czas zakonczenia symulacji (wpisz liczbe) : ";
+    std::cin >> simulation_time;
+    std::cout << "Prosze podac czas zakonczenia fazy poczatkowej (wpisz liczbe) : ";
+    std::cin >> starting_time;
+    std:: cout << std::endl;
+    
+    //Prepare seeds for generator
+    std::queue<int> seeds_queue;
+    LoadSeeds(seeds_queue);
+    
+    //Lambda declaration
+    double L = 0.05;
+  
+    WirelessNetwork *wireless_network = new WirelessNetwork(L, seeds_queue);
     wireless_network->GenerateRXTX();
-    Simulation* simulation = new Simulation(wireless_network);
-    simulation->Run(100000);
-    //simulation->Run(10000);
+    Simulation* simulation = new Simulation(wireless_network, starting_time);
+    simulation->Run(simulation_time);
+    //Simulations being made
+    //Wireless Network uses "global" queue, so it has to be remade after every iteration
+    //and same goes for Simulation object because it bases on WirelessNetwork object
+    /*for (int i = 0; i < 10; ++i)
+    {
+      WirelessNetwork *wireless_network = new WirelessNetwork(L, seeds_queue);
+      wireless_network->GenerateRXTX();
+      Simulation* simulation = new Simulation(wireless_network, starting_time);
+      simulation->Run(simulation_time);
+    }*/
 }
