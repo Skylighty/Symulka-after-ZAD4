@@ -17,6 +17,7 @@ double Simulation::GetBitrate()
 
 void Simulation::DisplayStatistics()
 {
+  wireless_network_->logger->SetLevel(Logger::Level::Info);
   wireless_network_->logger->Info("------------------------------------------------------------------------------\n");
   for (int i = 0; i < wireless_network_->kDeviceCount_; i++)
   {
@@ -33,6 +34,8 @@ void Simulation::DisplayStatistics()
   wireless_network_->logger->Info("Przeplywnosc systemu = " + std::to_string(GetBitrate()) + "p/sek.\n");
   wireless_network_->logger->Info("Srednie opoznienie pakietu = " + std::to_string(wireless_network_->GetAverageDelay()) + "ms\n");
   wireless_network_->logger->Info("Sredni czas oczekiwanie na opuszczenie bufora = " + std::to_string(wireless_network_->GetAverageBufforLeaveTime()) + "ms\n");
+  wireless_network_->OutputRetransmissionToFile();
+  wireless_network_->OutputAverageBERToFile();
 }
 
 void Simulation::Run(int time)

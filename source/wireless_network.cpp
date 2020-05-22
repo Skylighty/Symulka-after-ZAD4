@@ -14,6 +14,16 @@ WirelessNetwork::WirelessNetwork(double lambda, std::queue<int> &squeue) {
     total_success_delay_ = 0;
     retransmissions_ = 0;
     rejected_packets_ = 0;
+    retransmissions_vector = new std::vector<double>;
+    average_ber_vector = new std::vector<double>;
+}
+
+void WirelessNetwork::AddAverageRetransmissionRatio() {
+  retransmissions_vector->push_back(GetAverageRetransmissions());
+}
+
+void WirelessNetwork::AddAverageBERRatio() {
+  average_ber_vector->push_back(GetAverageBER());
 }
 
 double WirelessNetwork::GetAverageDelay()
@@ -29,7 +39,10 @@ double WirelessNetwork::GetAverageBufforLeaveTime()
 //Returns average retransmissions (only successful packets)
 double WirelessNetwork::GetAverageRetransmissions()
 {
-  return static_cast<double>(retransmissions_)/successful_packets_;
+  if (successful_packets_ != 0 && retransmissions_ != 0)
+    return static_cast<double>(retransmissions_)/successful_packets_;
+  else
+    return 0;
 }
 
 //Returns average BER from all TXs
@@ -98,6 +111,34 @@ RX *WirelessNetwork::GetRX(int id) {
             break;
   }
   return checked_rx;
+}
+
+void WirelessNetwork::OutputRetransmissionToFile()
+{
+  std::ofstream file;
+  file.open("retransmission_ratio.txt");
+  //file << "\n----------------------------------------------------------------------------";
+  //file << "----------------=+ Simulation Average Retransmission Info +=----------------";
+  for (int i = 0; i < retransmissions_vector->size()-1; ++i)
+  {
+    file << std::to_string(retransmissions_vector->at(i)) << "\n";
+  }
+  //file << "----------------------------------------------------------------------------\n";
+  file.close();
+}
+
+void WirelessNetwork::OutputAverageBERToFile()
+{
+  std::ofstream file;
+  file.open("average_ber.txt");
+  //file << "\n----------------------------------------------------------------------------";
+  //file << "----------------=+ Simulation Average Retransmission Info +=----------------";
+  for (int i = 0; i < average_ber_vector->size()-1; ++i)
+  {
+    file << std::to_string(average_ber_vector->at(i)) << "\n";
+  }
+  //file << "----------------------------------------------------------------------------\n";
+  file.close();
 }
 
 

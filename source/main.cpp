@@ -44,14 +44,17 @@ void GenerateSeeds(Generator* gen)
   seeds.close();
 }
 
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// =============== STARTING PHASE ======================
+// ======== Starting phase is about time = 100 =========
+// =====================================================
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
 int main(int argc, char *argv[])
 {
     //Generator object for generating starting seeds
     Generator* start_gen = new Generator(12554568);
     GenerateSeeds(start_gen);
-    
-    //A Logger object for statistics output.
-    Logger* log = new Logger();
     
     //Declaring simulation times - simulating 60 seconds = 1 minute for each simulation
     size_t simulation_time = 0;
@@ -71,6 +74,11 @@ int main(int argc, char *argv[])
     double L = 0.05;
   
     WirelessNetwork *wireless_network = new WirelessNetwork(L, seeds_queue);
+    
+    //Smart way to bypass all the simulation run info and get straight to the statistics.
+    //If you want all of simulation ran messages (what's happening in time) set it to "Info" here
+    wireless_network->logger->SetLevel(Logger::Level::DoNothing);
+    
     wireless_network->GenerateRXTX();
     Simulation* simulation = new Simulation(wireless_network, starting_time);
     simulation->Run(simulation_time);

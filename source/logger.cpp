@@ -11,10 +11,11 @@ Logger::~Logger() {
 }
 
 void Logger::Info(std::string message) {
-    if (new_level != Level::Error) {
+    if (new_level != Level::Error && new_level != Level::DoNothing) {
         std::cout << " [INFO] " << message << std::endl;
         logfile << " [INFO] " << message << std::endl;
     }
+    else {}
 }
 
 void Logger::Debug(std::string message) {

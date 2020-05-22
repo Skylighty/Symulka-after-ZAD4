@@ -11,7 +11,7 @@ class Logger {
 public:
 
     enum class Level {
-        Info, Debug, Error
+        Info, Debug, Error, DoNothing
     };
 
     Logger();

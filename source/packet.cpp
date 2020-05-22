@@ -298,6 +298,7 @@ void Packet::StateCheck() {
           network_->IncBufferTime(GetBufforLeaveTime());
           network_->IncSuccessPacket();
           network_->IncRetransmissions(r_);
+          network_->AddAverageRetransmissionRatio();
           CurrentTX->AddSuccessPacket();
         }
         CurrentTX->SetTXPacket(nullptr);
@@ -315,6 +316,9 @@ void Packet::StateCheck() {
     //Setting channel free only at THIS point is mandatory!!!!!
     
   if (network_->channel_->ChannelEmpty()) {network_->channel_->SetBusy(false);}
+  
+  if (network_->CheckIfStartingPhaseEnded() == true)
+    network_->AddAverageBERRatio();
 }
 
 

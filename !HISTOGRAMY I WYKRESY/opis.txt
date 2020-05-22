@@ -1,0 +1,38 @@
+==================================================
+==================== UWAGA !!! ===================
+===== Seed dla wszystkich wartości: 12554568 =====
+==================================================
+
+1. Zaimplementowany Generator zwyczajny (uniform):
+Generator generuje ułamki z przedziału 0-1, które służą,
+do wyznaczenia następnych wartośći generowanych w odpowiednich funkcjach.
+Komenda: Rand();
+
+2. Zaimplementowany Generator wykładniczy do czasu CGP:
+Generator generuje wartości o rozkładzie wykładniczym, w zależności od parametru lambda.
+Do generowania wartości przykładowych posłużono się lambdą 0.05.
+Generowane są wartości z przedziału 0-120 i służą one do wylosowania czasu
+pojawienia się nowego pakietu w systemie.
+Komenda : RandEXP(0.05);
+
+3. Zaimplementowany Generator równomierny do czasu CTP:
+Generator generujący wartości o rozkładzie równomiernym,
+z zakresu 1-10, któe służą do określania czasu przesyłania pakietu przez system.
+Komeda : Rand(1,10);
+
+4. Zaimplementowany Generator równomierny do T i R:
+Generator generujący wartości o rozkłądzie równomiernym,
+z zakresu mniej, więcej 0-500, gdzie zdecydowanie przeważają wartośći małe.
+Wartości T i R to tak naprawdę czasy CTP i CRP, ponieważ z czasów tych,
+usunięto skalowanie z czasem CTP, gdyż wartości byłyby zdecydowanie za wysokie.
+współczynniki r i t, które posłużyły do wygenerowania histogramu zostały wygenerowane w ten sam sposób:
+int r = Rand(1,10), gdyż 10 to maksymalna wartość retransmisji.
+Komenda : Rand(0,pow(2,r_)-1);
+
+5. Zaimplementowany Generator zero-jedynkowy do błędu TER:
+Generator generujący wartości zero-jedynkowe, czyli w programowaniu dla nas true-false.
+Wartości te służą do określenia czy wystąpił błąd TER.
+Przy podaniu argumentu 0.2 jest 20% szans na wylosowanie wartości true, 80% szans na false.
+
+
+

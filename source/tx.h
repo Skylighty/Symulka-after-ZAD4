@@ -39,6 +39,7 @@ public:
     int GetTXRejectedPackets() {return rejected_packets_;}
     //---------------------------------------------------------------------------
     
+    
     //Generators are public - for easier implementation.
     //---------------------------------------------------------------------------
     int GetSeed();

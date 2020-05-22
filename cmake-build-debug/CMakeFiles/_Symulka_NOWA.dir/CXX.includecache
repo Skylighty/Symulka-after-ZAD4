@@ -6,22 +6,6 @@
 
 #IncludeRegexTransform: 
 
-E:/!_STUDIA_!/SEMESTR 6/LABORKI/!Symulka_NOWA/source/Simulation.cpp
-wireless_network.h
-E:/!_STUDIA_!/SEMESTR 6/LABORKI/!Symulka_NOWA/source/wireless_network.h
-Simulation.h
-E:/!_STUDIA_!/SEMESTR 6/LABORKI/!Symulka_NOWA/source/Simulation.h
-process.h
-E:/!_STUDIA_!/SEMESTR 6/LABORKI/!Symulka_NOWA/source/process.h
-packet.h
-E:/!_STUDIA_!/SEMESTR 6/LABORKI/!Symulka_NOWA/source/packet.h
-iostream
--
-
-E:/!_STUDIA_!/SEMESTR 6/LABORKI/!Symulka_NOWA/source/Simulation.h
-wireless_network.h
-E:/!_STUDIA_!/SEMESTR 6/LABORKI/!Symulka_NOWA/source/wireless_network.h
-
 E:/!_STUDIA_!/SEMESTR 6/LABORKI/!Symulka_NOWA/source/channel.h
 vector
 -
@@ -40,24 +24,6 @@ E:/!_STUDIA_!/SEMESTR 6/LABORKI/!Symulka_NOWA/source/logger.h
 string
 -
 fstream
--
-
-E:/!_STUDIA_!/SEMESTR 6/LABORKI/!Symulka_NOWA/source/main.cpp
-Simulation.h
-E:/!_STUDIA_!/SEMESTR 6/LABORKI/!Symulka_NOWA/source/Simulation.h
-wireless_network.h
-E:/!_STUDIA_!/SEMESTR 6/LABORKI/!Symulka_NOWA/source/wireless_network.h
-iostream
--
-string
--
-vector
--
-queue
--
-fstream
--
-memory
 -
 
 E:/!_STUDIA_!/SEMESTR 6/LABORKI/!Symulka_NOWA/source/packet.h
@@ -90,8 +56,18 @@ E:/!_STUDIA_!/SEMESTR 6/LABORKI/!Symulka_NOWA/source/packet.h
 generator.h
 E:/!_STUDIA_!/SEMESTR 6/LABORKI/!Symulka_NOWA/source/generator.h
 
+E:/!_STUDIA_!/SEMESTR 6/LABORKI/!Symulka_NOWA/source/wireless_network.cpp
+wireless_network.h
+E:/!_STUDIA_!/SEMESTR 6/LABORKI/!Symulka_NOWA/source/wireless_network.h
+Windows.h
+-
+
 E:/!_STUDIA_!/SEMESTR 6/LABORKI/!Symulka_NOWA/source/wireless_network.h
 vector
+-
+fstream
+-
+string
 -
 tx.h
 E:/!_STUDIA_!/SEMESTR 6/LABORKI/!Symulka_NOWA/source/tx.h
